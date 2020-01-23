@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
 class Chibi_hybrid:
     def __init__( self, fclass, finstance=None, doc=None ):
         self.fclass = fclass
