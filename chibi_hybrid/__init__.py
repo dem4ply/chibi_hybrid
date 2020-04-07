@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .chibi_hybrid import Chibi_hybrid
+from .chibi_hybrid import Chibi_hybrid, Class_property
 
 
 __all__ = [ 'Chibi_hybrid' ]
