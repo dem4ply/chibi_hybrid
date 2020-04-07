@@ -17,6 +17,7 @@ chibi_hybrid
 
 
 simple class for have hybrid class and instance methods
+and add class properties
 
 
 * Free software: WTFPL
@@ -26,12 +27,42 @@ simple class for have hybrid class and instance methods
 Features
 --------
 
-* TODO
 
-Credits
--------
+.. code-block:: python
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+	from chibi_hybrid.chibi_hybrid import Chibi_hybrid, Class_property
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+	class Dump:
+		__bar = ''
+
+		def __init__( self, value ):
+			self.value = value
+
+		@Chibi_hybrid
+		def foo( cls ):
+			return cls( 'cls' )
+
+		@foo.instancemethod
+		def foo( self ):
+			return self.value
+
+		@Class_property
+		def bar( cls ):
+			return cls.__bar
+
+		@bar.setter
+		def bar( cls, value ):
+			cls.__bar = value
+
+	result = Dump.foo()
+	assert result == Dump
+	assert 'cls' == result.value
+	assert 'cls' == result.foo()
+
+	result = Dump( 'cosa' ).foo()
+	assert 'cosa' == result
+
+	assert Dump.bar == ''
+	Dump.bar = "cosa 2"
+	assert Dump.bar == 'cosa 2'
