@@ -18,3 +18,31 @@ class Chibi_hybrid:
               # either bound to the class, or no instance method available
             return self.fclass.__get__( cls, None )
         return self.finstance.__get__( instance, cls )
+
+
+class Descriptor_class_property:
+    def __init__( self, fget, fset=None ):
+        self.fget = fget
+        self.fset = fset
+
+    def __get__( self, obj, cls=None ):
+        if cls is None:
+            cls = type( obj )
+        return self.fget.__get__( obj, cls )()
+
+    def __set__( self, obj, value ):
+        if not self.fset:
+            raise AttributeError( "can not set the attribute" )
+        return self.fset.__get__( obj, type( obj ) )( value )
+
+    def setter( self, func ):
+        if not isinstance( func, ( classmethod, staticmethod ) ):
+            func = classmethod( func )
+        self.fset = func
+        return self
+
+def Class_property( func ):
+    if not isinstance( func, ( classmethod, staticmethod )):
+        func = classmethod( func )
+
+    return Descriptor_class_property( func )
