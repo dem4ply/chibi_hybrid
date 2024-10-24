@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from chibi_hybrid.chibi_hybrid import Chibi_hybrid, Class_property
+from chibi_hybrid import Chibi_hybrid, Class_property
 
 
 class Dump:
@@ -27,6 +27,10 @@ class Dump:
     def bar( cls, value ):
         cls.__bar = value
 
+    @bar.instance
+    def bar( self ):
+        return self.value
+
 
 class Test_chibi_hybrid( unittest.TestCase ):
     def test_should_work( self ):
@@ -42,3 +46,9 @@ class Test_chibi_hybrid( unittest.TestCase ):
         self.assertEqual( Dump.bar, '' )
         Dump.bar = "cosa 2"
         self.assertEqual( Dump.bar, 'cosa 2' )
+
+    def test_instance_property_should_work( self ):
+        self.assertEqual( Dump.bar, '' )
+        dump = Dump( "cosa 2" )
+        self.assertEqual( dump.bar, 'cosa 2' )
+        self.assertEqual( Dump.bar, '' )
