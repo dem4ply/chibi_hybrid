@@ -29,7 +29,7 @@ class Descriptor_class_property:
     def __get__( self, obj, cls=None ):
         if cls is None:
             cls = type( obj )
-        if obj and self.f_get_instance is not None:
+        if obj is not None and self.f_get_instance is not None:
             return self.f_get_instance.__get__( obj, cls )
         return self.fget.__get__( obj, cls )()
 

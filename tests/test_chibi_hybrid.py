@@ -32,6 +32,28 @@ class Dump:
         return self.value
 
 
+class Inner_reason_fail:
+    def __init__( self, parent ):
+        self.parent = parent
+
+
+class Reason_fail( str ):
+    schema = 'http'
+    host = None
+
+    def __init__( self ):
+        self._API = Inner_reason_fail( self )
+
+    @Class_property
+    def API( cls ):
+        return cls().API
+
+    @API.instance
+    def API( self ):
+        return self._API
+
+
+
 class Test_chibi_hybrid( unittest.TestCase ):
     def test_should_work( self ):
         result = Dump.foo()
@@ -52,3 +74,17 @@ class Test_chibi_hybrid( unittest.TestCase ):
         dump = Dump( "cosa 2" )
         self.assertEqual( dump.bar, 'cosa 2' )
         self.assertEqual( Dump.bar, '' )
+
+
+class Test_reason_fail( unittest.TestCase ):
+    def test_should_work( self ):
+        result = Reason_fail.API
+        result2 = Reason_fail.API
+        self.assertTrue( result )
+        self.assertIsNot( result, result2 )
+
+        reason = Reason_fail()
+        instance_result = reason.API
+        instance_result2 = reason.API
+        self.assertIs( instance_result, instance_result2 )
+        self.assertIsNot( instance_result, result )
